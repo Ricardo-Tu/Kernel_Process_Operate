@@ -7,7 +7,6 @@ VOID	UnloadMyDriver(
 	_In_	PDRIVER_OBJECT	pDriverObject
 )
 {
-	
 	UNREFERENCED_PARAMETER(pDriverObject);
 
 	//MyClass->ResumeProcess(5220);
@@ -15,23 +14,14 @@ VOID	UnloadMyDriver(
 	delete MyClass;
 
 	KdPrint(("Unload...\n"));
-
 }
 
 
-
-
-
-
-
-EXTERN_C
-NTSTATUS
-DriverEntry(
+EXTERN_C NTSTATUS DriverEntry(
 	_In_	PDRIVER_OBJECT	pDriverObject,
 	_In_	PUNICODE_STRING	pRegistryPath
 )
 {
-
 	UNREFERENCED_PARAMETER(pRegistryPath);
 
 	MyClass = new Process_Operation;
@@ -42,38 +32,9 @@ DriverEntry(
 
 	//MyClass->KillProcess(6084);
 
-
 	MyClass->ZeroProcessMemory("calc.exe");
 
 	pDriverObject->DriverUnload = UnloadMyDriver;
-
-
+	
 	return STATUS_SUCCESS;
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
