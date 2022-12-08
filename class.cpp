@@ -1,16 +1,12 @@
 #include "common.h"
 
-
-
-
-
 _Use_decl_annotations_
 PEPROCESS
 Process_Operation::GetEprocessByPid(
 	_In_ HANDLE pid
 )
 {
-	//¸ù¾İPID ·µ»ØPEPROCESS
+	//æ ¹æ®PID è¿”å›PEPROCESS
 	PEPROCESS pEpro = NULL;
 
 	NTSTATUS status = STATUS_UNSUCCESSFUL;
@@ -21,9 +17,7 @@ Process_Operation::GetEprocessByPid(
 		return pEpro;
 
 	return NULL;
-
 }
-
 
 
 _Use_decl_annotations_
@@ -47,35 +41,27 @@ Process_Operation::GetPidByProcessName(
 
 			if (strstr((PCCHAR)PsGetProcessImageFileName(pCurrentEprocess), ProcessName) != NULL)
 			{
-				ObDereferenceObject(pCurrentEprocess); //½âÒıÓÃ
+				ObDereferenceObject(pCurrentEprocess); //è§£å¼•ç”¨
 
 				KdPrint(("This <%s> Process ID is <%d>!\r\n", ProcessName, (LONG)pid));
 
 				return pid;
 			}
-			ObDereferenceObject(pCurrentEprocess); //½âÒıÓÃ
+			ObDereferenceObject(pCurrentEprocess); //è§£å¼•ç”¨
 		}
 	}
 
 	KdPrint(("Not Found %s Process!\r\n",ProcessName));
 
-	return (HANDLE)-1;  // Ê§°Ü·µ»Ø 0xffffffff
-
+	return (HANDLE)-1;  // å¤±è´¥è¿”å› 0xffffffff
 }
 
 
-
 /*
-*
-*   ±éÀú½ø³Ì²Ù×÷º¯Êı
-*
+*   éå†è¿›ç¨‹æ“ä½œå‡½æ•°
 */
-
-_Use_decl_annotations_
-VOID
-Process_Operation::ScanningProcessInformation()
+_Use_decl_annotations_ VOID Process_Operation::ScanningProcessInformation()
 {
-
 	PEPROCESS pCurrentEprocess = NULL;
 
 	KdPrint(("Start Read Process Information!\n"));
@@ -88,12 +74,12 @@ Process_Operation::ScanningProcessInformation()
 		if (pCurrentEprocess != NULL)
 		{
 
-			KdPrint(("½ø³ÌÃû×ÖÎª: %s ½ø³ÌPID = %lld ½ø³ÌµÄ¸¸Pid = %lld\r\n",
+			KdPrint(("è¿›ç¨‹åå­—ä¸º: %s è¿›ç¨‹PID = %lld è¿›ç¨‹çš„çˆ¶Pid = %lld\r\n",
 				PsGetProcessImageFileName(pCurrentEprocess),
 				(ULONG64)PsGetProcessId(pCurrentEprocess),
 				(ULONG64)PsGetProcessInheritedFromUniqueProcessId(pCurrentEprocess)));
 
-			ObDereferenceObject(pCurrentEprocess);   //½âÒıÓÃ
+			ObDereferenceObject(pCurrentEprocess);   //è§£å¼•ç”¨
 
 		}
 	}
@@ -103,20 +89,14 @@ Process_Operation::ScanningProcessInformation()
 }
 
 
-
-
 /*
 *
-*   ¹ÒÆğ½ø³Ìº¯Êı
+*   æŒ‚èµ·è¿›ç¨‹å‡½æ•°
 *
-*	²ÎÊı1£º Ä¿±ê½ø³ÌPID
+*	å‚æ•°1ï¼š ç›®æ ‡è¿›ç¨‹PID
 *
 */
-
-
-_Use_decl_annotations_
-NTSTATUS
-Process_Operation::SuspendProcess(
+_Use_decl_annotations_ NTSTATUS Process_Operation::SuspendProcess(
 	_In_ ULONG pid
 )
 {
@@ -154,16 +134,11 @@ Process_Operation::SuspendProcess(
 
 
 /*
+*   æ¢å¤è¿›ç¨‹å‡½æ•°
 *
-*   »Ö¸´½ø³Ìº¯Êı
-*
-*	²ÎÊı1£º Ä¿±ê½ø³ÌPID
-*
+*	å‚æ•°1ï¼š ç›®æ ‡è¿›ç¨‹PID
 */
-
-_Use_decl_annotations_
-NTSTATUS
-Process_Operation::ResumeProcess(
+_Use_decl_annotations_ NTSTATUS Process_Operation::ResumeProcess(
 	_In_ ULONG pid
 )
 {
@@ -199,13 +174,10 @@ Process_Operation::ResumeProcess(
 }
 
 
-_Use_decl_annotations_
-NTSTATUS
-Process_Operation::KillProcess(
+_Use_decl_annotations_ NTSTATUS Process_Operation::KillProcess(
 	_In_ ULONG pid
 )
 {
-
 	NTSTATUS status = STATUS_SUCCESS;
 
 	HANDLE ProcessHandle = NULL;
@@ -244,11 +216,7 @@ Process_Operation::KillProcess(
 }
 
 
-
-
-_Use_decl_annotations_
-NTSTATUS
-Process_Operation::ZeroProcessMemory(
+_Use_decl_annotations_ NTSTATUS Process_Operation::ZeroProcessMemory(
 	_In_ PCHAR ProcessName
 )
 {
@@ -274,7 +242,7 @@ Process_Operation::ZeroProcessMemory(
 	}
 
 	//KeAttachProcess(proc);
-	//KeDetachProcess()  µÈ¶¼ÒÑ¾­¹ıÊ±.ËùÒÔÊ¹ÓÃĞÂµÄ
+	//KeDetachProcess()  ç­‰éƒ½å·²ç»è¿‡æ—¶.æ‰€ä»¥ä½¿ç”¨æ–°çš„
 	pApcState = (PKAPC_STATE)ExAllocatePoolWithTag(NonPagedPool, sizeof(PKAPC_STATE), '1111');
 
 	if (NULL == pApcState)
@@ -297,7 +265,7 @@ Process_Operation::ZeroProcessMemory(
 			}
 			__except (1)
 			{
-				;  //ÄÚ²¿´¦ÀíÒì³£
+				;  //å†…éƒ¨å¤„ç†å¼‚å¸¸
 			}
 		}
 		KeUnstackDetachProcess(pApcState);
@@ -310,24 +278,14 @@ Process_Operation::ZeroProcessMemory(
 	}
 	__except (1)
 	{
-
 		KdPrint(("KillProcess By Zero Memory fail!\r\n"));
 
 		KeUnstackDetachProcess(pApcState);
 
 		ObDereferenceObject(proc);
-
 	}
-
 	return STATUS_UNSUCCESSFUL;
-
 }
-
-
-
-
-
-
 
 
 _IRQL_requires_max_(DISPATCH_LEVEL)
@@ -346,23 +304,3 @@ void __cdecl operator delete(void* p, SIZE_T size) {
 		ExFreePoolWithTag(p, 'delC');
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
