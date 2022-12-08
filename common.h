@@ -13,44 +13,10 @@ extern "C"
 
 #include <intrin.h>
 
-
-
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
-
-
-
-
 #include "class.h"
 
 #include "main.h"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
